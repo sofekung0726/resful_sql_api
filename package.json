@@ -1,0 +1,15 @@
+{
+  "name": "restful_sql_qpi",
+  "version": "1.0.0",
+  "description": "this project is form sql api",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "resful",
+    "api"
+  ],
+  "author": "Bowornlak Yookong",
+  "license": "ISC"
+}
