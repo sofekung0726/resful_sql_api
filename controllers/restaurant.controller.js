@@ -1,3 +1,4 @@
+const { restart } = require("nodemon");
 const Restaurant = require("../models/restaurant.model");
 // Restaurant.createRestaurant = async(newRestaurant)=>{
 //     try {
@@ -29,8 +30,10 @@ const getAll = async (req, res) => {
 
     try {
         const allRestaurant = await Restaurant.findAll()
+        const result = allRestaurant.map((restaurant)=> {return restaurant.toJSON()})
         console.log("get user all", allRestaurant);
-        res.status(200).json({ allRestaurant })
+        res.status(200).json(result)
+        // return allRestaurant.map((restaurant)=> restaurant.toJSON())
     } catch (err) {
         console.log("err", err);
         res.status(500)
@@ -76,19 +79,21 @@ const deleteId = async (req, res) => {
     }
 }
 const updateres = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const data = req.body;
-        if (!id || !data) {
-            res.status(404).send("Not find element");
-        }
-        const restaurants = { where: { id: id } }
-        await Restaurant.update(data, restaurants)
-        res.status(200).json({
-            restaurants
-        })
+    const id = req.params.id
+    const {name , type , imageurl} = req.body
+    if (!name || !type || !imageurl) {
+        return res.status(404).send("Fail")
     }
-    catch (error) {
+    try {
+        const result = await Restaurant.findOne({where : {id:id}})
+        if (!result) {
+            return res.status(400).send("did find id"+id)
+        }
+    await Restaurant.update({name,type,imageurl},{where :{id:id}})
+        res.status(200).send("update เรียบร้อย")
+        
+    }
+    catch (err) {
         console.log("err", err);
         res.status(500)
     }
