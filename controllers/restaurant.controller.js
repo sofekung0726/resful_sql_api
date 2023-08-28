@@ -1,4 +1,4 @@
-const { restart } = require("nodemon");
+
 const Restaurant = require("../models/restaurant.model");
 // Restaurant.createRestaurant = async(newRestaurant)=>{
 //     try {
