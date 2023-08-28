@@ -1,115 +1,42 @@
 const express = require("express");
 const router = express.Router();
-const Restaurant = require("../models/restaurant.model");
-const { restart } = require("nodemon");
+const Restaurant = require("../controllers/restaurant.controller")
+const {getAll,getId,createRes,deleteId,updateres} = require("../controllers/restaurant.controller")
+// router.post("/restaurant", async(req,res)=>{
+//     try{
+//         const newRestaurant = req.body;
+//         const createRestaurant = await Restaurant.createRestaurant(newRestaurant)
+//         res.status(201).json(createRestaurant);
+//     }catch(err){
+//         res.status(500).json({err:"fail to create restaurant"});
+//     }
+// });
+// router.get("/restaurant", async (req,res)=>{
+//     try {
+        
+//         const getAllRestaurant = await Restaurant.getAll()
+//         res.status(202).json(getAllRestaurant);
+//     } catch (err) {
+//          res.status(500).json({err:"fail to get all user"})
+//     }
+// })
 
-//insert restaurant to database
+// router.get("/restaurant/:id", async (req,res)=>{
+//     try {
+//         const idRes = Number.parseInt(req.params.id)
+//         const getByIdRestaurant = await Restaurant.getById(idRes);
+//         res.status(201).json(getByIdRestaurant);
 
-router.post("/restaurants", (req, res) => {
-    const newRestaurant = new Restaurant({
-        name: req.body.name,
-        type: req.body.type,
-        imageurl: req.body.imageurl
+//     } catch (error) {
+//         res.status(502).json({err:"fail to get user"})
+//     }
 
-    });
-    //insert to db
-    Restaurant.create(newRestaurant, (err, data) => {
-        if (err) {
-            res.status(500).send({
-                message: err.message || "Some error occured while inserting new restaurant"
-            });
-
-        } else {
-            res.send(data)
-        }
-    })
-});
-router.get("/restaurants", (req, res) => {
-    Restaurant.getAll((err, data) => {
-        if (err) {
-            if (err) {
-                res.status(500).send({
-                    message:
-                        err.message || "Some error occured while inserting new restaurant"
-                })
-            }
-        } else {
-            res.send(data)
-        }
-    })
-
-})
-
-router.get("/restaurants/:id", (req, res) => {
-    const restaurantId = Number.parseInt(req.params.id);
-    Restaurant.getById(restaurantId, (err, data) => {
-        if (err) {
-            if (err.kind === "not_found") {
-                res.status(400).send({
-                    message: "restaurant not found with this id " + restaurantId,
-                }
-                )
-            } else {
-                res.status(500).send({
-                    message:
-                        err.message ||
-                        "Some error occured while inserting the new restaurant",
-                });
-            }
-        } else {
-            res.send(data);
-        }
-    })
-});
-
-router.put("/restaurants/:id", (req, res) => {
-    const restaurantId = Number.parseInt(req.params.id);
-    if (req.body.constructor === Object && Object.keys(req.body).lebgth === 0) {
-        res.status(400).send({
-            message: "Attributes can not be empty ! "
-        })
-    }
-    Restaurant.updateById(restaurantId, new Restaurant(req.body), (err, data) => {
-        if (err) {
-            if (err.kind === "Not Found") {
-                res.status(400).send({
-                    message: "Restaurant not found with id " + restaurantId
-                })
-            }else {
-                res.status(500).send({
-                    message:
-                        err.message ||
-                        "Some error occured while inserting the new restaurant",
-                });
-            }
-        }else {
-            res.send(data);
-        }
-    })
-})
-
-router.delete("/restaurants/:id", (req,res)=>{
-    const restaurantId = Number.parseInt(req.params.id);
-    Restaurant.deleteById(restaurantId,(err,data)=>{
-        if (err) {
-            if (err.kind === "Not Found") {
-                res.status(400).send({
-                    message: "Restaurant not found with id " + restaurantId
-                })
-            }else {
-                res.status(500).send({
-                    message:
-                        err.message ||
-                        "Some error occured while inserting the new restaurant",
-                });
-            }
-        }else {
-            res.send({
-                message: "Restaurant id"+ restaurantId +"is deleted"
-            });
-        }
-    })
-})
+// })
 
 
+router.get("/restaurant", getAll)
+router.get("/restaurant/:id", getId)
+router.post("/restaurant", createRes)
+router.delete("/restaurant/:id", deleteId)
+router.put("/restaurant/:id", updateres)
 module.exports = router;

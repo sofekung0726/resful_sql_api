@@ -5,6 +5,10 @@ const sql = require("./models/db");
 const app = express();
 const restaorantRouter = require("./routes/restaurant.router")
 
+const notFoundmiddelware = require("./middleware/not-found")
+
+
+
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extends:false}));
@@ -14,7 +18,7 @@ app.get("/",(req,res)=>{
 
 });
 app.use("/",restaorantRouter);
-
+app.use(notFoundmiddelware);
 app.listen(PORT,() =>{
 console.log("Server is running on http://localhost:" + PORT);
 
